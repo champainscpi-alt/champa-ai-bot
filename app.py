@@ -7,72 +7,110 @@ import google.generativeai as genai
 # ==========================================
 st.set_page_config(page_title="Champa AI Assistant", page_icon="🏢")
 
-# ==========================================
-# 1. ระบบรักษาความปลอดภัย
-# ==========================================
-COMPANY_PASSWORD = "Champa@2026"
-
-if "authenticated" not in st.session_state:
-    st.session_state.authenticated = False
-
-if not st.session_state.authenticated:
-    try:
-        st.image("logo.jpg", width=250)
-    except:
-        pass # ป้องกัน Error กรณีคลาวด์หาไฟล์ภาพไม่เจอ
+# 🟢 เพิ่มฟอนต์ Noto Sans Lao และ Noto Sans Thai ให้ตัวหนังสือสวยงาม
+st.markdown("""
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
         
-    st.title("🛡️ เข้าสู่ระบบ Champa AI")
-    st.markdown("ระบบผู้ช่วยอัจฉริยะสำหรับพนักงาน **จำปาประกันภัย (Champa Insurance)**")
-    pwd = st.text_input("กรุณาใส่รหัสผ่านของบริษัท:", type="password")
-    
-    if st.button("เข้าสู่ระบบ"):
-        if pwd == COMPANY_PASSWORD:
-            st.session_state.authenticated = True
-            st.rerun()
-        else:
-            st.error("รหัสผ่านไม่ถูกต้อง โปรดลองอีกครั้ง")
-    st.stop() 
+        * {
+            font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif !important;
+        }
+    </style>
+""", unsafe_allow_html=True)
 
 # ==========================================
-# 2. ระบบเลือกภาษา (Lao, English, Vietnamese, Thai)
+# 1. ฐานข้อมูลภาษา (รวมหน้าล็อกอินและหน้าแชท)
 # ==========================================
 lang_options = {
     "ລາວ (Lao)": {
+        "login_title": "🛡️ ເຂົ້າສູ່ລະບົບ Champa AI",
+        "login_sub": "ລະບົບຜູ້ຊ່ວຍອັດສະລິຍະສຳລັບພະນັກງານ **ຈຳປາປະກັນໄພ (Champa Insurance)**",
+        "pwd_prompt": "ກະລຸນາໃສ່ລະຫັດຜ່ານຂອງບໍລິສັດ:",
+        "login_btn": "ເຂົ້າສູ່ລະບົບ",
+        "login_err": "ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ ກະລຸນາລອງໃໝ່",
         "title": "🐘 ລະບົບຖາມ-ຕອບ ພາຍໃນຈຳປາປະກັນໄພ",
         "subtitle": "ພິມຄຳຖາມກ່ຽວກັບແຜນທຸລະກິດປີ 2026, ໂຄງສ້າງອົງກອນ, ຫຼື ນະໂຍບາຍໄດ້ເລີຍ",
         "input": "ພິມຄຳຖາມຂອງທ່ານທີ່ນີ້...",
         "ai_instruction": "You must answer the question in Lao language (ພາສາລາວ) naturally and professionally."
     },
+    "ภาษาไทย (Thai)": {
+        "login_title": "🛡️ เข้าสู่ระบบ Champa AI",
+        "login_sub": "ระบบผู้ช่วยอัจฉริยะสำหรับพนักงาน **จำปาประกันภัย (Champa Insurance)**",
+        "pwd_prompt": "กรุณาใส่รหัสผ่านของบริษัท:",
+        "login_btn": "เข้าสู่ระบบ",
+        "login_err": "รหัสผ่านไม่ถูกต้อง โปรดลองอีกครั้ง",
+        "title": "🐘 ระบบถาม-ตอบ ภายในจำปาประกันภัย",
+        "subtitle": "พิมพ์คำถามเกี่ยวกับแผนธุรกิจปี 2026, โครงสร้างองค์กร, หรือนโยบายการรับประกันภัยได้เลยครับ",
+        "input": "พิมพ์คำถามของคุณที่นี่...",
+        "ai_instruction": "You must answer the question in Thai language naturally and professionally."
+    },
     "English": {
+        "login_title": "🛡️ Login to Champa AI",
+        "login_sub": "Smart AI Assistant for **Champa Insurance** employees",
+        "pwd_prompt": "Please enter the company password:",
+        "login_btn": "Login",
+        "login_err": "Incorrect password. Please try again.",
         "title": "🐘 Champa Insurance Q&A System",
         "subtitle": "Ask questions about the 2026 business plan, organizational structure, or policies.",
         "input": "Type your question here...",
         "ai_instruction": "You must answer the question in English naturally and professionally."
     },
     "Tiếng Việt (Vietnamese)": {
+        "login_title": "🛡️ Đăng nhập Champa AI",
+        "login_sub": "Trợ lý AI thông minh dành cho nhân viên **Champa Insurance**",
+        "pwd_prompt": "Vui lòng nhập mật khẩu công ty:",
+        "login_btn": "Đăng nhập",
+        "login_err": "Sai mật khẩu. Vui lòng thử lại.",
         "title": "🐘 Hệ thống Hỏi đáp Champa Insurance",
         "subtitle": "Nhập câu hỏi về kế hoạch kinh doanh 2026, cơ cấu tổ chức hoặc chính sách.",
         "input": "Nhập câu hỏi của bạn tại đây...",
         "ai_instruction": "You must answer the question in Vietnamese (Tiếng Việt) naturally and professionally."
-    },
-    "ภาษาไทย (Thai)": {
-        "title": "🐘 ระบบถาม-ตอบ ภายในจำปาประกันภัย",
-        "subtitle": "พิมพ์คำถามเกี่ยวกับแผนธุรกิจปี 2026, โครงสร้างองค์กร, หรือนโยบายการรับประกันภัยได้เลยครับ",
-        "input": "พิมพ์คำถามของคุณที่นี่...",
-        "ai_instruction": "You must answer the question in Thai language naturally and professionally."
     }
 }
 
-# สร้างเมนูด้านซ้ายสำหรับเปลี่ยนภาษา
-with st.sidebar:
-    st.subheader("🌐 Select Language")
-    selected_lang = st.selectbox("เลือกภาษา / ເລືອກພາສາ / Chọn ngôn ngữ", list(lang_options.keys()))
+# ==========================================
+# 2. ระบบรักษาความปลอดภัย & เลือกภาษาหน้าแรก
+# ==========================================
+COMPANY_PASSWORD = "Champa@2026"
 
-ui_text = lang_options[selected_lang]
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+
+if "selected_lang" not in st.session_state:
+    st.session_state.selected_lang = "ລາວ (Lao)"
+
+if not st.session_state.authenticated:
+    try:
+        st.image("logo.jpg", width=250)
+    except:
+        pass
+        
+    # 🟢 ย้ายเมนูเลือกภาษามาไว้หน้าล็อกอิน
+    st.session_state.selected_lang = st.selectbox(
+        "🌐 Language / ພາສາ / Ngôn ngữ", 
+        list(lang_options.keys()), 
+        index=list(lang_options.keys()).index(st.session_state.selected_lang)
+    )
+    
+    ui_text = lang_options[st.session_state.selected_lang]
+    
+    st.title(ui_text["login_title"])
+    st.markdown(ui_text["login_sub"])
+    pwd = st.text_input(ui_text["pwd_prompt"], type="password")
+    
+    if st.button(ui_text["login_btn"]):
+        if pwd == COMPANY_PASSWORD:
+            st.session_state.authenticated = True
+            st.rerun()
+        else:
+            st.error(ui_text["login_err"])
+    st.stop() 
 
 # ==========================================
-# 3. โหลดข้อมูลจำปาประกันภัย
+# 3. โหลดข้อมูลจำปาประกันภัย (หน้าแชทหลัก)
 # ==========================================
+ui_text = lang_options[st.session_state.selected_lang]
+
 try:
     st.image("logo.jpg", width=200)
 except:
