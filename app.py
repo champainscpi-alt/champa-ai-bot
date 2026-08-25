@@ -235,7 +235,7 @@ with tab3:
     # รายชื่อไฟล์ที่ต้องการให้พนักงานดาวน์โหลดได้
     # **วิธีการใช้งาน**: ให้นำไฟล์ PDF หรือ Word ไปอัปโหลดไว้ใน GitHub พร้อมกับไฟล์โค้ด
     files_to_download = [
-        {"name": "แบบฟอร์มเบิกเคลมประกันรถยนต์ (Claim Form)", "filename": "claim_form.pdf"},
+        {"name": "แบบฟอร์ม Company Profile (Claim Form)", "filename": "CPI Company Profile .pdf"},
         {"name": "นโยบายการพิจารณารับประกันภัย 2026 (Underwriting Guidelines)", "filename": "underwriting_2026.pdf"},
         {"name": "แบบฟอร์มคำขอลาพักร้อน (Leave Request)", "filename": "leave_request.docx"}
     ]
