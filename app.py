@@ -5,9 +5,9 @@ import google.generativeai as genai
 # ==========================================
 # ตั้งค่าหน้าเว็บ
 # ==========================================
-st.set_page_config(page_title="Champa AI Assistant", page_icon="🏢")
+st.set_page_config(page_title="Champa AI Assistant", page_icon="🏢", layout="centered")
 
-# 🟢 เพิ่มฟอนต์ Noto Sans Lao และ Noto Sans Thai ให้ตัวหนังสือสวยงาม
+# 🟢 CSS ปรับแต่งความสวยงาม (ฟอนต์ และ การจัดหน้า)
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
@@ -15,6 +15,10 @@ st.markdown("""
         * {
             font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif !important;
         }
+        /* ซ่อนเมนูพื้นฐานของ Streamlit ที่ไม่จำเป็น */
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        header {visibility: hidden;}
     </style>
 """, unsafe_allow_html=True)
 
@@ -28,7 +32,7 @@ lang_options = {
         "pwd_prompt": "ກະລຸນາໃສ່ລະຫັດຜ່ານຂອງບໍລິສັດ:",
         "login_btn": "ເຂົ້າສູ່ລະບົບ",
         "login_err": "ລະຫັດຜ່ານບໍ່ຖືກຕ້ອງ ກະລຸນາລອງໃໝ່",
-        "title": "🐘 ລະບົບຖາມ-ຕອບ ພາຍໃນຈຳປາປະກັນໄພ",
+        "title": "ລະບົບຖາມ-ຕອບ ພາຍໃນຈຳປາປະກັນໄພ",
         "subtitle": "ພິມຄຳຖາມກ່ຽວກັບແຜນທຸລະກິດປີ 2026, ໂຄງສ້າງອົງກອນ, ຫຼື ນະໂຍບາຍໄດ້ເລີຍ",
         "input": "ພິມຄຳຖາມຂອງທ່ານທີ່ນີ້...",
         "ai_instruction": "You must answer the question in Lao language (ພາສາລາວ) naturally and professionally."
@@ -39,7 +43,7 @@ lang_options = {
         "pwd_prompt": "กรุณาใส่รหัสผ่านของบริษัท:",
         "login_btn": "เข้าสู่ระบบ",
         "login_err": "รหัสผ่านไม่ถูกต้อง โปรดลองอีกครั้ง",
-        "title": "🐘 ระบบถาม-ตอบ ภายในจำปาประกันภัย",
+        "title": "ระบบถาม-ตอบ ภายในจำปาประกันภัย",
         "subtitle": "พิมพ์คำถามเกี่ยวกับแผนธุรกิจปี 2026, โครงสร้างองค์กร, หรือนโยบายการรับประกันภัยได้เลยครับ",
         "input": "พิมพ์คำถามของคุณที่นี่...",
         "ai_instruction": "You must answer the question in Thai language naturally and professionally."
@@ -50,7 +54,7 @@ lang_options = {
         "pwd_prompt": "Please enter the company password:",
         "login_btn": "Login",
         "login_err": "Incorrect password. Please try again.",
-        "title": "🐘 Champa Insurance Q&A System",
+        "title": "Champa Insurance Q&A System",
         "subtitle": "Ask questions about the 2026 business plan, organizational structure, or policies.",
         "input": "Type your question here...",
         "ai_instruction": "You must answer the question in English naturally and professionally."
@@ -61,7 +65,7 @@ lang_options = {
         "pwd_prompt": "Vui lòng nhập mật khẩu công ty:",
         "login_btn": "Đăng nhập",
         "login_err": "Sai mật khẩu. Vui lòng thử lại.",
-        "title": "🐘 Hệ thống Hỏi đáp Champa Insurance",
+        "title": "Hệ thống Hỏi đáp Champa Insurance",
         "subtitle": "Nhập câu hỏi về kế hoạch kinh doanh 2026, cơ cấu tổ chức hoặc chính sách.",
         "input": "Nhập câu hỏi của bạn tại đây...",
         "ai_instruction": "You must answer the question in Vietnamese (Tiếng Việt) naturally and professionally."
@@ -79,13 +83,20 @@ if "authenticated" not in st.session_state:
 if "selected_lang" not in st.session_state:
     st.session_state.selected_lang = "ລາວ (Lao)"
 
+# ฟังก์ชันแสดงโลโก้ตรงกลาง
+def display_centered_logo(width_ratio=2):
+    col1, col2, col3 = st.columns([1, width_ratio, 1])
+    with col2:
+        try:
+            st.image("logo.jpg", use_container_width=True)
+        except:
+            pass
+
 if not st.session_state.authenticated:
-    try:
-        st.image("logo.jpg", width=250)
-    except:
-        pass
+    st.write("<br>", unsafe_allow_html=True) # เพิ่มช่องว่างด้านบน
+    display_centered_logo(width_ratio=1.5)
+    st.write("<br>", unsafe_allow_html=True)
         
-    # 🟢 ย้ายเมนูเลือกภาษามาไว้หน้าล็อกอิน
     st.session_state.selected_lang = st.selectbox(
         "🌐 Language / ພາສາ / Ngôn ngữ", 
         list(lang_options.keys()), 
@@ -98,7 +109,7 @@ if not st.session_state.authenticated:
     st.markdown(ui_text["login_sub"])
     pwd = st.text_input(ui_text["pwd_prompt"], type="password")
     
-    if st.button(ui_text["login_btn"]):
+    if st.button(ui_text["login_btn"], use_container_width=True):
         if pwd == COMPANY_PASSWORD:
             st.session_state.authenticated = True
             st.rerun()
@@ -111,13 +122,12 @@ if not st.session_state.authenticated:
 # ==========================================
 ui_text = lang_options[st.session_state.selected_lang]
 
-try:
-    st.image("logo.jpg", width=200)
-except:
-    pass
+st.write("<br>", unsafe_allow_html=True)
+display_centered_logo(width_ratio=2)
 
-st.title(ui_text["title"])
-st.markdown(ui_text["subtitle"])
+st.title(f"🐘 {ui_text['title']}")
+st.markdown(f"**{ui_text['subtitle']}**")
+st.divider() # เส้นคั่นเพื่อความสวยงาม
 
 API_KEY = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=API_KEY)
@@ -140,20 +150,26 @@ company_knowledge = load_company_data()
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
+# 🟢 ตั้งค่า Avatar ให้ตายตัว แก้ปัญหาไอคอนพัง
+USER_AVATAR = "👤"
+BOT_AVATAR = "🐘"
+
 for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
+    avatar_icon = USER_AVATAR if msg["role"] == "user" else BOT_AVATAR
+    with st.chat_message(msg["role"], avatar=avatar_icon):
         st.markdown(msg["content"])
 
 user_input = st.chat_input(ui_text["input"])
 
 if user_input:
-    with st.chat_message("user"):
+    with st.chat_message("user", avatar=USER_AVATAR):
         st.markdown(user_input)
     st.session_state.messages.append({"role": "user", "content": user_input})
 
     prompt = f"""
     คุณคือผู้ช่วย AI อัจฉริยะของบริษัท จำปาประกันภัย (Champa Insurance) สปป.ลาว
     จงตอบคำถามพนักงานโดยอ้างอิงจากข้อมูลของบริษัทด้านล่างนี้เท่านั้น 
+    จัดรูปแบบการตอบให้สวยงาม อ่านง่าย ใช้ Bullet points เมื่อจำเป็น
     
     **คำสั่งสำคัญ (CRITICAL INSTRUCTION):** 
     {ui_text["ai_instruction"]}
@@ -171,6 +187,6 @@ if user_input:
     except Exception as e:
         bot_reply = f"System Error: {e}"
 
-    with st.chat_message("assistant"):
+    with st.chat_message("assistant", avatar=BOT_AVATAR):
         st.markdown(bot_reply)
     st.session_state.messages.append({"role": "assistant", "content": bot_reply})
