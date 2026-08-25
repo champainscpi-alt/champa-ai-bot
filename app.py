@@ -3,9 +3,9 @@ import pandas as pd
 import google.generativeai as genai
 
 # ==========================================
-# ตั้งค่าหน้าเว็บ
+# ตั้งค่าหน้าเว็บ (เปลี่ยนไอคอนหน้าเว็บเป็นดอกจำปา)
 # ==========================================
-st.set_page_config(page_title="Champa AI Assistant", page_icon="🏢", layout="centered")
+st.set_page_config(page_title="Champa AI Assistant", page_icon="🌼", layout="centered")
 
 # 🟢 CSS ปรับแต่งความสวยงาม (ฟอนต์ และ การจัดหน้า)
 st.markdown("""
@@ -93,7 +93,7 @@ def display_centered_logo(width_ratio=2):
             pass
 
 if not st.session_state.authenticated:
-    st.write("<br>", unsafe_allow_html=True) # เพิ่มช่องว่างด้านบน
+    st.write("<br>", unsafe_allow_html=True)
     display_centered_logo(width_ratio=1.5)
     st.write("<br>", unsafe_allow_html=True)
         
@@ -125,9 +125,10 @@ ui_text = lang_options[st.session_state.selected_lang]
 st.write("<br>", unsafe_allow_html=True)
 display_centered_logo(width_ratio=2)
 
-st.title(f"🐘 {ui_text['title']}")
-st.markdown(f"**{ui_text['subtitle']}**")
-st.divider() # เส้นคั่นเพื่อความสวยงาม
+# 🟢 บังคับให้หัวข้ออยู่บรรทัดเดียวกัน จัดกึ่งกลาง และใช้ไอคอนดอกจำปา
+st.markdown(f"<h3 style='text-align: center; white-space: nowrap;'>🌼 {ui_text['title']}</h3>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align: center; color: #555;'><b>{ui_text['subtitle']}</b></p>", unsafe_allow_html=True)
+st.divider() 
 
 API_KEY = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=API_KEY)
@@ -150,9 +151,9 @@ company_knowledge = load_company_data()
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# 🟢 ตั้งค่า Avatar ให้ตายตัว แก้ปัญหาไอคอนพัง
+# 🟢 เปลี่ยนไอคอนแชท AI เป็นดอกจำปา
 USER_AVATAR = "👤"
-BOT_AVATAR = "🐘"
+BOT_AVATAR = "🌼"
 
 for msg in st.session_state.messages:
     avatar_icon = USER_AVATAR if msg["role"] == "user" else BOT_AVATAR
