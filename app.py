@@ -10,19 +10,24 @@ import base64
 # ==========================================
 st.set_page_config(page_title="Champa AI Assistant", page_icon="🌼", layout="centered")
 
-# 🟢 อัปเดต CSS ล่าสุด: บังคับฟอนต์ลาวให้สวยงาม และปกป้องไอคอนลูกศร
+# 🟢 อัปเดต CSS ล่าสุด: นำเข้าฟอนต์ไอคอนของระบบ เพื่อแก้ปัญหา arrow_down แบบถาวร
 st.markdown("""
     <style>
+        /* 1. นำเข้าฟอนต์ตัวหนังสือ ลาว/ไทย */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
         
-        /* 1. บังคับใช้ฟอนต์ลาว/ไทย แบบเด็ดขาดกับตัวอักษรทุกชนิดบนหน้าเว็บ */
-        html, body, div, span, p, h1, h2, h3, h4, h5, h6, a, button, input, label, li {
+        /* 2. นำเข้าฟอนต์ไอคอนลูกศร (ป้องกันบั๊ก arrow_down) */
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0');
+        
+        /* 3. บังคับใช้ฟอนต์ Noto Sans กับข้อความทั้งหมดในเว็บ */
+        * {
             font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif !important;
         }
         
-        /* 2. สั่งยกเว้นเฉพาะส่วนที่เป็น "ไอคอนระบบ" (แก้บั๊กตัวหนังสือ arrow_down) */
-        .material-symbols-rounded, .material-icons, [data-testid="stExpanderToggleIcon"], [data-testid="stExpanderToggleIcon"] * {
-            font-family: 'Material Symbols Rounded', sans-serif !important;
+        /* 4. สั่งให้ลูกศรและไอคอน กลับไปใช้ฟอนต์ไอคอนที่นำเข้ามาในข้อ 2 */
+        .material-icons, .material-symbols-rounded, [data-testid="stExpanderToggleIcon"], [data-testid="stExpanderToggleIcon"] * {
+            font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
         }
         
         #MainMenu {visibility: hidden;}
