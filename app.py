@@ -1,13 +1,14 @@
 import streamlit as st
 import pandas as pd
 import google.generativeai as genai
+import plotly.express as px
+import os
 
 # ==========================================
-# ตั้งค่าหน้าเว็บ (เปลี่ยนไอคอนหน้าเว็บเป็นดอกจำปา)
+# ตั้งค่าหน้าเว็บ (ไอคอนดอกจำปา และจัดกึ่งกลาง)
 # ==========================================
 st.set_page_config(page_title="Champa AI Assistant", page_icon="🌼", layout="centered")
 
-# 🟢 CSS ปรับแต่งความสวยงาม (ฟอนต์ และ การจัดหน้า)
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
@@ -15,7 +16,6 @@ st.markdown("""
         * {
             font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif !important;
         }
-        /* ซ่อนเมนูพื้นฐานของ Streamlit ที่ไม่จำเป็น */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
@@ -23,7 +23,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 1. ฐานข้อมูลภาษา (รวมหน้าล็อกอินและหน้าแชท)
+# 1. ฐานข้อมูลภาษา (รองรับ 4 ภาษา)
 # ==========================================
 lang_options = {
     "ລາວ (Lao)": {
@@ -35,7 +35,12 @@ lang_options = {
         "title": "ລະບົບຖາມ-ຕອບ ພາຍໃນຈຳປາປະກັນໄພ",
         "subtitle": "ພິມຄຳຖາມກ່ຽວກັບແຜນທຸລະກິດປີ 2026, ໂຄງສ້າງອົງກອນ, ຫຼື ນະໂຍບາຍໄດ້ເລີຍ",
         "input": "ພິມຄຳຖາມຂອງທ່ານທີ່ນີ້...",
-        "ai_instruction": "You must answer the question in Lao language (ພາສາລາວ) naturally and professionally."
+        "ai_instruction": "You must answer the question in Lao language (ພາສາລາວ) naturally and professionally.",
+        "tab_chat": "💬 ຖາມ-ຕອບ",
+        "tab_dash": "📊 ຂໍ້ມູນສະຖິຕິ",
+        "tab_forms": "📥 ດາວໂຫຼດແບບຟອມ",
+        "chart_title": "ສັດສ່ວນເປົ້າໝາຍທຸລະກິດ ປະກັນໄພປີ 2026",
+        "form_missing": "ຍັງບໍ່ມີໄຟລ໌ແບບຟອມໃນລະບົບ (ກະລຸນາອັບໂຫຼດໄຟລ໌ລົງ GitHub)"
     },
     "ภาษาไทย (Thai)": {
         "login_title": "🛡️ เข้าสู่ระบบ Champa AI",
@@ -46,7 +51,12 @@ lang_options = {
         "title": "ระบบถาม-ตอบ ภายในจำปาประกันภัย",
         "subtitle": "พิมพ์คำถามเกี่ยวกับแผนธุรกิจปี 2026, โครงสร้างองค์กร, หรือนโยบายการรับประกันภัยได้เลยครับ",
         "input": "พิมพ์คำถามของคุณที่นี่...",
-        "ai_instruction": "You must answer the question in Thai language naturally and professionally."
+        "ai_instruction": "You must answer the question in Thai language naturally and professionally.",
+        "tab_chat": "💬 ถาม-ตอบ",
+        "tab_dash": "📊 แดชบอร์ด",
+        "tab_forms": "📥 ดาวน์โหลดแบบฟอร์ม",
+        "chart_title": "สัดส่วนเป้าหมายธุรกิจ ประกันภัยปี 2026",
+        "form_missing": "ยังไม่มีไฟล์แบบฟอร์มในระบบ (โปรดอัปโหลดไฟล์ลง GitHub)"
     },
     "English": {
         "login_title": "🛡️ Login to Champa AI",
@@ -57,7 +67,12 @@ lang_options = {
         "title": "Champa Insurance Q&A System",
         "subtitle": "Ask questions about the 2026 business plan, organizational structure, or policies.",
         "input": "Type your question here...",
-        "ai_instruction": "You must answer the question in English naturally and professionally."
+        "ai_instruction": "You must answer the question in English naturally and professionally.",
+        "tab_chat": "💬 Q&A",
+        "tab_dash": "📊 Dashboard",
+        "tab_forms": "📥 Download Forms",
+        "chart_title": "2026 Business Target Portfolio",
+        "form_missing": "No form files available yet (Please upload to GitHub)"
     },
     "Tiếng Việt (Vietnamese)": {
         "login_title": "🛡️ Đăng nhập Champa AI",
@@ -68,7 +83,12 @@ lang_options = {
         "title": "Hệ thống Hỏi đáp Champa Insurance",
         "subtitle": "Nhập câu hỏi về kế hoạch kinh doanh 2026, cơ cấu tổ chức hoặc chính sách.",
         "input": "Nhập câu hỏi của bạn tại đây...",
-        "ai_instruction": "You must answer the question in Vietnamese (Tiếng Việt) naturally and professionally."
+        "ai_instruction": "You must answer the question in Vietnamese (Tiếng Việt) naturally and professionally.",
+        "tab_chat": "💬 Hỏi đáp",
+        "tab_dash": "📊 Thống kê",
+        "tab_forms": "📥 Tải biểu mẫu",
+        "chart_title": "Mục tiêu Kinh doanh năm 2026",
+        "form_missing": "Chưa có tệp biểu mẫu nào (Vui lòng tải lên GitHub)"
     }
 }
 
@@ -83,7 +103,6 @@ if "authenticated" not in st.session_state:
 if "selected_lang" not in st.session_state:
     st.session_state.selected_lang = "ລາວ (Lao)"
 
-# ฟังก์ชันแสดงโลโก้ตรงกลาง
 def display_centered_logo(width_ratio=2):
     col1, col2, col3 = st.columns([1, width_ratio, 1])
     with col2:
@@ -118,21 +137,19 @@ if not st.session_state.authenticated:
     st.stop() 
 
 # ==========================================
-# 3. โหลดข้อมูลจำปาประกันภัย (หน้าแชทหลัก)
+# 3. ส่วนหัวของเว็บ (โหลดข้อมูลและแสดงโลโก้)
 # ==========================================
 ui_text = lang_options[st.session_state.selected_lang]
 
 st.write("<br>", unsafe_allow_html=True)
 display_centered_logo(width_ratio=2)
 
-# 🟢 บังคับให้หัวข้ออยู่บรรทัดเดียวกัน จัดกึ่งกลาง และใช้ไอคอนดอกจำปา
 st.markdown(f"<h3 style='text-align: center; white-space: nowrap;'>🌼 {ui_text['title']}</h3>", unsafe_allow_html=True)
 st.markdown(f"<p style='text-align: center; color: #555;'><b>{ui_text['subtitle']}</b></p>", unsafe_allow_html=True)
 st.divider() 
 
 API_KEY = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=API_KEY)
-
 LOCAL_EXCEL_FILE = "champa_data.xlsx" 
 
 @st.cache_data(ttl=300) 
@@ -146,48 +163,97 @@ def load_company_data():
 company_knowledge = load_company_data()
 
 # ==========================================
-# 4. ระบบแชท 
+# 4. ระบบแท็บ (Tabs): แชท / กราฟ / แบบฟอร์ม
 # ==========================================
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+tab1, tab2, tab3 = st.tabs([ui_text["tab_chat"], ui_text["tab_dash"], ui_text["tab_forms"]])
 
-# 🟢 เปลี่ยนไอคอนแชท AI เป็นดอกจำปา
-USER_AVATAR = "👤"
-BOT_AVATAR = "🌼"
+# --- TAB 1: ระบบถาม-ตอบ ---
+with tab1:
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
 
-for msg in st.session_state.messages:
-    avatar_icon = USER_AVATAR if msg["role"] == "user" else BOT_AVATAR
-    with st.chat_message(msg["role"], avatar=avatar_icon):
-        st.markdown(msg["content"])
+    USER_AVATAR = "👤"
+    BOT_AVATAR = "🌼"
 
-user_input = st.chat_input(ui_text["input"])
+    for msg in st.session_state.messages:
+        avatar_icon = USER_AVATAR if msg["role"] == "user" else BOT_AVATAR
+        with st.chat_message(msg["role"], avatar=avatar_icon):
+            st.markdown(msg["content"])
 
-if user_input:
-    with st.chat_message("user", avatar=USER_AVATAR):
-        st.markdown(user_input)
-    st.session_state.messages.append({"role": "user", "content": user_input})
+    user_input = st.chat_input(ui_text["input"])
 
-    prompt = f"""
-    คุณคือผู้ช่วย AI อัจฉริยะของบริษัท จำปาประกันภัย (Champa Insurance) สปป.ลาว
-    จงตอบคำถามพนักงานโดยอ้างอิงจากข้อมูลของบริษัทด้านล่างนี้เท่านั้น 
-    จัดรูปแบบการตอบให้สวยงาม อ่านง่าย ใช้ Bullet points เมื่อจำเป็น
+    if user_input:
+        with st.chat_message("user", avatar=USER_AVATAR):
+            st.markdown(user_input)
+        st.session_state.messages.append({"role": "user", "content": user_input})
+
+        prompt = f"""
+        คุณคือผู้ช่วย AI อัจฉริยะของบริษัท จำปาประกันภัย (Champa Insurance) สปป.ลาว
+        จงตอบคำถามพนักงานโดยอ้างอิงจากข้อมูลของบริษัทด้านล่างนี้เท่านั้น 
+        จัดรูปแบบการตอบให้สวยงาม อ่านง่าย ใช้ Bullet points เมื่อจำเป็น
+        
+        **คำสั่งสำคัญ (CRITICAL INSTRUCTION):** 
+        {ui_text["ai_instruction"]}
+
+        ข้อมูลภายในบริษัท:
+        {company_knowledge}
+
+        คำถามของพนักงาน: {user_input}
+        """
+
+        try:
+            model = genai.GenerativeModel('gemini-3.6-flash')
+            response = model.generate_content(prompt)
+            bot_reply = response.text
+        except Exception as e:
+            bot_reply = f"System Error: {e}"
+
+        with st.chat_message("assistant", avatar=BOT_AVATAR):
+            st.markdown(bot_reply)
+        st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+
+# --- TAB 2: แดชบอร์ด & รูปพาย ---
+with tab2:
+    st.subheader(ui_text["chart_title"])
+    # ข้อมูลจำลองสำหรับกราฟ (สามารถแก้ตัวเลขสัดส่วนได้เลย)
+    chart_data = {
+        'Category': ['ປະກັນໄພລົດຍົນ (Motor)', 'ປະກັນໄພສ່ວນບຸກຄົນ (Personal)', 'ປະກັນໄພຊັບສິນ (Property)', 'ອື່ນໆ (Others)'],
+        'Percentage': [55, 25, 15, 5]
+    }
+    df_chart = pd.DataFrame(chart_data)
     
-    **คำสั่งสำคัญ (CRITICAL INSTRUCTION):** 
-    {ui_text["ai_instruction"]}
+    # สร้างรูปพายที่สวยงามและ interactive
+    fig = px.pie(df_chart, values='Percentage', names='Category', hole=0.3, 
+                 color_discrete_sequence=px.colors.qualitative.Pastel)
+    fig.update_layout(margin=dict(t=20, b=20, l=20, r=20))
+    st.plotly_chart(fig, use_container_width=True)
 
-    ข้อมูลภายในบริษัท:
-    {company_knowledge}
-
-    คำถามของพนักงาน: {user_input}
-    """
-
-    try:
-        model = genai.GenerativeModel('gemini-3.6-flash')
-        response = model.generate_content(prompt)
-        bot_reply = response.text
-    except Exception as e:
-        bot_reply = f"System Error: {e}"
-
-    with st.chat_message("assistant", avatar=BOT_AVATAR):
-        st.markdown(bot_reply)
-    st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+# --- TAB 3: ดาวน์โหลดแบบฟอร์ม ---
+with tab3:
+    st.markdown("### 🗂️ เอกสารและแบบฟอร์มภายในบริษัท")
+    
+    # รายชื่อไฟล์ที่ต้องการให้พนักงานดาวน์โหลดได้
+    # **วิธีการใช้งาน**: ให้นำไฟล์ PDF หรือ Word ไปอัปโหลดไว้ใน GitHub พร้อมกับไฟล์โค้ด
+    files_to_download = [
+        {"name": "แบบฟอร์มเบิกเคลมประกันรถยนต์ (Claim Form)", "filename": "claim_form.pdf"},
+        {"name": "นโยบายการพิจารณารับประกันภัย 2026 (Underwriting Guidelines)", "filename": "underwriting_2026.pdf"},
+        {"name": "แบบฟอร์มคำขอลาพักร้อน (Leave Request)", "filename": "leave_request.docx"}
+    ]
+    
+    files_found = False
+    for file_info in files_to_download:
+        file_path = file_info["filename"]
+        # ระบบจะเช็คว่ามีไฟล์นี้อยู่ในระบบหรือไม่
+        if os.path.exists(file_path):
+            files_found = True
+            with open(file_path, "rb") as f:
+                st.download_button(
+                    label=f"📥 ดาวน์โหลด: {file_info['name']}",
+                    data=f,
+                    file_name=file_path,
+                    use_container_width=True
+                )
+    
+    # หากยังไม่ได้อัปโหลดไฟล์เข้าระบบ จะแสดงข้อความแจ้งเตือน
+    if not files_found:
+        st.info(ui_text["form_missing"])
