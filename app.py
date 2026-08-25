@@ -3,6 +3,7 @@ import pandas as pd
 import google.generativeai as genai
 import plotly.express as px
 import os
+import base64
 
 # ==========================================
 # ตั้งค่าหน้าเว็บ (ไอคอนดอกจำปา และจัดกึ่งกลาง)
@@ -215,45 +216,49 @@ with tab1:
 # --- TAB 2: แดชบอร์ด & รูปพาย ---
 with tab2:
     st.subheader(ui_text["chart_title"])
-    # ข้อมูลจำลองสำหรับกราฟ (สามารถแก้ตัวเลขสัดส่วนได้เลย)
     chart_data = {
         'Category': ['ປະກັນໄພລົດຍົນ (Motor)', 'ປະກັນໄພສ່ວນບຸກຄົນ (Personal)', 'ປະກັນໄພຊັບສິນ (Property)', 'ອື່ນໆ (Others)'],
         'Percentage': [55, 25, 15, 5]
     }
     df_chart = pd.DataFrame(chart_data)
     
-    # สร้างรูปพายที่สวยงามและ interactive
     fig = px.pie(df_chart, values='Percentage', names='Category', hole=0.3, 
                  color_discrete_sequence=px.colors.qualitative.Pastel)
     fig.update_layout(margin=dict(t=20, b=20, l=20, r=20))
     st.plotly_chart(fig, use_container_width=True)
 
-# --- TAB 3: ดาวน์โหลดแบบฟอร์ม ---
+# --- TAB 3: ดาวน์โหลดและดูตัวอย่างแบบฟอร์ม ---
 with tab3:
     st.markdown("### 🗂️ เอกสารและแบบฟอร์มภายในบริษัท")
+    st.info("💡 คำแนะนำ: เพื่อให้ระบบแสดงหน้าตัวอย่างเอกสารได้สมบูรณ์ ควรใช้ไฟล์สกุล .pdf ครับ")
     
-    # รายชื่อไฟล์ที่ต้องการให้พนักงานดาวน์โหลดได้
-    # **วิธีการใช้งาน**: ให้นำไฟล์ PDF หรือ Word ไปอัปโหลดไว้ใน GitHub พร้อมกับไฟล์โค้ด
-    files_to_download = [
-        {"name": "แบบฟอร์ม Company Profile (Claim Form)", "filename": "CPI Company Profile .pdf"},
+    forms = [
+        {"name": "CPI Company Profile (CPI Company Profile)", "filename": "CPI Company Profile .pdf"},
         {"name": "นโยบายการพิจารณารับประกันภัย 2026 (Underwriting Guidelines)", "filename": "underwriting_2026.pdf"},
-        {"name": "แบบฟอร์มคำขอลาพักร้อน (Leave Request)", "filename": "leave_request.docx"}
+        {"name": "แบบฟอร์มคำขอลาพักร้อน (Leave Request)", "filename": "leave_request.pdf"}
     ]
     
-    files_found = False
-    for file_info in files_to_download:
-        file_path = file_info["filename"]
-        # ระบบจะเช็คว่ามีไฟล์นี้อยู่ในระบบหรือไม่
-        if os.path.exists(file_path):
-            files_found = True
-            with open(file_path, "rb") as f:
-                st.download_button(
-                    label=f"📥 ดาวน์โหลด: {file_info['name']}",
-                    data=f,
-                    file_name=file_path,
-                    use_container_width=True
-                )
-    
-    # หากยังไม่ได้อัปโหลดไฟล์เข้าระบบ จะแสดงข้อความแจ้งเตือน
-    if not files_found:
-        st.info(ui_text["form_missing"])
+    for form in forms:
+        st.markdown(f"**{form['name']}**")
+        col1, col2 = st.columns([1, 1])
+        
+        file_path = form['filename']
+        
+        with col1:
+            if os.path.exists(file_path):
+                with open(file_path, "rb") as f:
+                    st.download_button("📥 ดาวน์โหลดไฟล์", data=f, file_name=file_path, use_container_width=True, key=f"dl_{file_path}")
+            else:
+                st.download_button("📥 ดาวน์โหลดไฟล์", data="นี่คือไฟล์ทดสอบระบบ", file_name=file_path, use_container_width=True, key=f"mock_{file_path}")
+                
+        with col2:
+            with st.expander("👁️ ดูตัวอย่างเอกสาร"):
+                if os.path.exists(file_path):
+                    with open(file_path, "rb") as f:
+                        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+                    pdf_display = f'<iframe src="data:application/pdf;base64,{base64_pdf}" width="100%" height="400" type="application/pdf"></iframe>'
+                    st.markdown(pdf_display, unsafe_allow_html=True)
+                else:
+                    st.info(f"*(พื้นที่แสดงตัวอย่าง: จะปรากฏหน้ากระดาษจริง เมื่อคุณอัปโหลดไฟล์ {file_path} ขึ้น GitHub เรียบร้อยแล้วครับ)*")
+        
+        st.divider()
