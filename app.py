@@ -10,24 +10,14 @@ import base64
 # ==========================================
 st.set_page_config(page_title="Champa AI Assistant", page_icon="🌼", layout="centered")
 
-# 🟢 อัปเดต CSS ล่าสุด: นำเข้าฟอนต์ไอคอนของระบบ เพื่อแก้ปัญหา arrow_down แบบถาวร
+# 🟢 อัปเดต CSS ล่าสุด: ใช้เทคนิค :not() ยกเว้นไอคอน เพื่อแก้ปัญหาจบในรอบเดียว
 st.markdown("""
     <style>
-        /* 1. นำเข้าฟอนต์ตัวหนังสือ ลาว/ไทย */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
         
-        /* 2. นำเข้าฟอนต์ไอคอนลูกศร (ป้องกันบั๊ก arrow_down) */
-        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-        @import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0');
-        
-        /* 3. บังคับใช้ฟอนต์ Noto Sans กับข้อความทั้งหมดในเว็บ */
-        * {
+        /* บังคับฟอนต์ลาว/ไทย กับทุกสิ่งบนหน้าเว็บ "ยกเว้น" ไอคอนและกราฟิก */
+        *:not(i):not(.material-icons):not(.material-symbols-rounded):not(svg):not(path):not([data-testid="stExpanderToggleIcon"]):not([class*="Icon"]) {
             font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif !important;
-        }
-        
-        /* 4. สั่งให้ลูกศรและไอคอน กลับไปใช้ฟอนต์ไอคอนที่นำเข้ามาในข้อ 2 */
-        .material-icons, .material-symbols-rounded, [data-testid="stExpanderToggleIcon"], [data-testid="stExpanderToggleIcon"] * {
-            font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
         }
         
         #MainMenu {visibility: hidden;}
