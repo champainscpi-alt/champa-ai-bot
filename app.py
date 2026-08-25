@@ -10,19 +10,19 @@ import base64
 # ==========================================
 st.set_page_config(page_title="Champa AI Assistant", page_icon="🌼", layout="centered")
 
-# 🟢 อัปเดต CSS: แก้ปัญหา arrow_down ซ้อนทับ
+# 🟢 อัปเดต CSS ล่าสุด: บังคับฟอนต์ลาวให้สวยงาม และปกป้องไอคอนลูกศร
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
         
-        /* 1. เปลี่ยนฟอนต์เฉพาะข้อความ (ไม่ใช้ * เพื่อป้องกันการทับไอคอน) */
-        html, body, p, h1, h2, h3, h4, h5, h6, a, button, input, label, div {
-            font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif;
+        /* 1. บังคับใช้ฟอนต์ลาว/ไทย แบบเด็ดขาดกับตัวอักษรทุกชนิดบนหน้าเว็บ */
+        html, body, div, span, p, h1, h2, h3, h4, h5, h6, a, button, input, label, li {
+            font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif !important;
         }
         
-        /* 2. คืนค่าฟอนต์ให้ระบบไอคอนของ Streamlit (ลูกศร Preview) */
-        .material-icons, .material-symbols-rounded, [data-testid="stExpanderToggleIcon"], [data-testid="stExpanderToggleIcon"] * {
-            font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
+        /* 2. สั่งยกเว้นเฉพาะส่วนที่เป็น "ไอคอนระบบ" (แก้บั๊กตัวหนังสือ arrow_down) */
+        .material-symbols-rounded, .material-icons, [data-testid="stExpanderToggleIcon"], [data-testid="stExpanderToggleIcon"] * {
+            font-family: 'Material Symbols Rounded', sans-serif !important;
         }
         
         #MainMenu {visibility: hidden;}
