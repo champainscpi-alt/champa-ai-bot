@@ -10,16 +10,22 @@ import base64
 # ==========================================
 st.set_page_config(page_title="Champa AI Assistant", page_icon="🌼", layout="centered")
 
-# 🟢 อัปเดต CSS ล่าสุด: ใช้เทคนิค :not() ยกเว้นไอคอน เพื่อแก้ปัญหาจบในรอบเดียว
+# 🟢 อัปเดต CSS ล่าสุด: เจาะจงเฉพาะข้อความ ปล่อยผ่านโครงสร้างไอคอน
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
         
-        /* บังคับฟอนต์ลาว/ไทย กับทุกสิ่งบนหน้าเว็บ "ยกเว้น" ไอคอนและกราฟิก */
-        *:not(i):not(.material-icons):not(.material-symbols-rounded):not(svg):not(path):not([data-testid="stExpanderToggleIcon"]):not([class*="Icon"]) {
+        /* 1. ตั้งเป็นฟอนต์พื้นฐานของแอป (แบบนุ่มนวล ไม่บังคับทับไอคอน) */
+        .stApp {
+            font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif;
+        }
+        
+        /* 2. บังคับเปลี่ยนฟอนต์ "เฉพาะส่วนที่เป็นตัวอักษร" โดยเว้น span และ div ของไอคอนลูกศรไว้ */
+        h1, h2, h3, h4, h5, h6, p, a, li, button, input, label, .stMarkdown {
             font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif !important;
         }
         
+        /* 3. ซ่อนเมนูด้านบนและล่าง */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
