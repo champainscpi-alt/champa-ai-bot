@@ -10,13 +10,21 @@ import base64
 # ==========================================
 st.set_page_config(page_title="Champa AI Assistant", page_icon="🌼", layout="centered")
 
+# 🟢 อัปเดต CSS: แก้ปัญหา arrow_down ซ้อนทับ
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
         
-        * {
-            font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif !important;
+        /* 1. เปลี่ยนฟอนต์เฉพาะข้อความ (ไม่ใช้ * เพื่อป้องกันการทับไอคอน) */
+        html, body, p, h1, h2, h3, h4, h5, h6, a, button, input, label, div {
+            font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif;
         }
+        
+        /* 2. คืนค่าฟอนต์ให้ระบบไอคอนของ Streamlit (ลูกศร Preview) */
+        .material-icons, .material-symbols-rounded, [data-testid="stExpanderToggleIcon"], [data-testid="stExpanderToggleIcon"] * {
+            font-family: 'Material Symbols Rounded', 'Material Icons', sans-serif !important;
+        }
+        
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
@@ -246,7 +254,7 @@ with tab3:
         else:
             st.download_button("📥 ดาวน์โหลดไฟล์", data="นี่คือไฟล์ทดสอบระบบ", file_name=file_path, key=f"mock_{file_path}")
                 
-        # หน้าต่างดูตัวอย่างแบบเต็มจอ (ใช้ embed แก้ปัญหาหน้าขาว)
+        # หน้าต่างดูตัวอย่างแบบเต็มจอ
         with st.expander("คลิกเพื่อดูหน้าตัวอย่างเอกสาร (Preview)"):
             if os.path.exists(file_path):
                 with open(file_path, "rb") as f:
