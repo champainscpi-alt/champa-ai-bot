@@ -229,7 +229,7 @@ with tab3:
     st.info("💡 คำแนะนำ: เพื่อให้ระบบแสดงหน้าตัวอย่างเอกสารได้สมบูรณ์ ควรใช้ไฟล์สกุล .pdf ครับ")
     
     forms = [
-        {"name": "CPI Company Profile", "filename": "cpi_company_profile.pdf"},
+        {"name": "CPI Company Profile", "filename": "CPI Company Profile.pdf"},
         {"name": "นโยบายการพิจารณารับประกันภัย 2026 (Underwriting Guidelines)", "filename": "underwriting_2026.pdf"},
         {"name": "แบบฟอร์มคำขอลาพักร้อน (Leave Request)", "filename": "leave_request.pdf"}
     ]
