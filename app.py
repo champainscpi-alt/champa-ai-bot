@@ -3,6 +3,11 @@ import pandas as pd
 import google.generativeai as genai
 
 # ==========================================
+# ตั้งค่าหน้าเว็บ (ย้ายมารวมไว้ด้านบนสุด)
+# ==========================================
+st.set_page_config(page_title="Champa AI Assistant", page_icon="🏢")
+
+# ==========================================
 # 1. ระบบรักษาความปลอดภัย
 # ==========================================
 COMPANY_PASSWORD = "Champa@2026"
@@ -11,7 +16,8 @@ if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
 
 if not st.session_state.authenticated:
-    st.set_page_config(page_title="Champa AI Assistant", page_icon="🏢")
+    # 🟢 แสดงโลโก้ที่หน้าล็อกอิน
+    st.image("logo.jpg", width=250)
     st.title("🛡️ เข้าสู่ระบบ Champa AI")
     st.markdown("ระบบผู้ช่วยอัจฉริยะสำหรับพนักงาน **จำปาประกันภัย (Champa Insurance)**")
     pwd = st.text_input("กรุณาใส่รหัสผ่านของบริษัท:", type="password")
@@ -27,14 +33,15 @@ if not st.session_state.authenticated:
 # ==========================================
 # 2. โหลดข้อมูลจำปาประกันภัย
 # ==========================================
-st.set_page_config(page_title="Champa AI Assistant", page_icon="🐘")
+# 🟢 แสดงโลโก้ที่หน้าหลัก
+st.image("logo.jpg", width=200)
 st.title("🐘 ระบบถาม-ตอบ ภายในจำปาประกันภัย")
 st.markdown("พิมพ์คำถามเกี่ยวกับแผนธุรกิจปี 2026, โครงสร้างองค์กร, หรือนโยบายการรับประกันภัยได้เลยครับ")
 
+# ดึงรหัส API แบบปลอดภัย (สำหรับการรันบน Cloud)
 API_KEY = st.secrets["GEMINI_API_KEY"]
 genai.configure(api_key=API_KEY)
 
-# ใช้ชื่อไฟล์ใหม่ที่คุณเพิ่งเปลี่ยน
 LOCAL_EXCEL_FILE = "champa_data.xlsx" 
 
 @st.cache_data(ttl=300) 
