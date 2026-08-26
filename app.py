@@ -10,12 +10,11 @@ import base64
 # ==========================================
 st.set_page_config(page_title="Champa AI Assistant", page_icon="🌼", layout="centered")
 
-# 🟢 อัปเดต CSS ล่าสุด: เจาะจงเฉพาะข้อความ ปล่อยผ่านโครงสร้างไอคอน
 st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
         
-        /* 1. ตั้งเป็นฟอนต์พื้นฐานของแอป (แบบนุ่มนวล ไม่บังคับทับไอคอน) */
+        /* 1. ตั้งเป็นฟอนต์พื้นฐานของแอป */
         .stApp {
             font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif;
         }
@@ -33,7 +32,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 1. ฐานข้อมูลภาษา (รองรับ 4 ภาษา)
+# 1. ฐานข้อมูลภาษา (รองรับ 4 ภาษา ครอบคลุมทุกแท็บ)
 # ==========================================
 lang_options = {
     "ລາວ (Lao)": {
@@ -49,7 +48,17 @@ lang_options = {
         "tab_chat": "💬 ຖາມ-ຕອບ",
         "tab_dash": "📊 ຂໍ້ມູນສະຖິຕິ",
         "tab_forms": "📥 ດາວໂຫຼດແບບຟອມ",
-        "chart_title": "ສັດສ່ວນເປົ້າໝາຍທຸລະກິດ ປະກັນໄພປີ 2026"
+        "chart_title": "ສັດສ່ວນເປົ້າໝາຍທຸລະກິດ ປະກັນໄພປີ 2026",
+        "chart_labels": ['ປະກັນໄພລົດຍົນ (Motor)', 'ປະກັນໄພສ່ວນບຸກຄົນ (Personal)', 'ປະກັນໄພຊັບສິນ (Property)', 'ອື່ນໆ (Others)'],
+        "tab3_title": "### 🗂️ ເອກະສານ ແລະ ແບບຟອມພາຍໃນບໍລິສັດ",
+        "tab3_hint": "💡 ຄຳແນະນຳ: ເພື່ອໃຫ້ລະບົບສະແດງໜ້າຕົວຢ່າງເອກະສານໄດ້ສົມບູນ ຄວນໃຊ້ໄຟລ໌ສະກຸນ .pdf ຄຮັບ",
+        "form1_name": "CPI Company Profile",
+        "form2_name": "ນະໂຍບາຍການພິຈາລະນາຮັບປະກັນໄພ 2026 (Underwriting Guidelines)",
+        "form3_name": "ແບບຟອມຄຳຂໍລາພັກຜ່ອນ (Leave Request)",
+        "btn_download": "📥 ດາວໂຫຼດໄຟລ໌",
+        "mock_file": "ນີ້ຄືໄຟລ໌ທົດສອບລະບົບ",
+        "expander_preview": "ຄລິກເພື່ອເບິ່ງໜ້າຕົວຢ່າງເອກະສານ (Preview)",
+        "preview_missing": "*(ລະບົບຈະສະແດງຕົວຢ່າງເອກະສານທີ່ນີ້ ເມື່ອທ່ານອັບໂຫຼດໄຟລ໌ {file_path} ຂຶ້ນ GitHub ຮຽບຮ້ອຍແລ້ວ)*"
     },
     "ภาษาไทย (Thai)": {
         "login_title": "🛡️ เข้าสู่ระบบ Champa AI",
@@ -64,7 +73,17 @@ lang_options = {
         "tab_chat": "💬 ถาม-ตอบ",
         "tab_dash": "📊 แดชบอร์ด",
         "tab_forms": "📥 ดาวน์โหลดแบบฟอร์ม",
-        "chart_title": "สัดส่วนเป้าหมายธุรกิจ ประกันภัยปี 2026"
+        "chart_title": "สัดส่วนเป้าหมายธุรกิจ ประกันภัยปี 2026",
+        "chart_labels": ['ประกันภัยรถยนต์ (Motor)', 'ประกันภัยส่วนบุคคล (Personal)', 'ประกันภัยทรัพย์สิน (Property)', 'อื่นๆ (Others)'],
+        "tab3_title": "### 🗂️ เอกสารและแบบฟอร์มภายในบริษัท",
+        "tab3_hint": "💡 คำแนะนำ: เพื่อให้ระบบแสดงหน้าตัวอย่างเอกสารได้สมบูรณ์ ควรใช้ไฟล์สกุล .pdf ครับ",
+        "form1_name": "CPI Company Profile",
+        "form2_name": "นโยบายการพิจารณารับประกันภัย 2026 (Underwriting Guidelines)",
+        "form3_name": "แบบฟอร์มคำขอลาพักร้อน (Leave Request)",
+        "btn_download": "📥 ดาวน์โหลดไฟล์",
+        "mock_file": "นี่คือไฟล์ทดสอบระบบ",
+        "expander_preview": "คลิกเพื่อดูหน้าตัวอย่างเอกสาร (Preview)",
+        "preview_missing": "*(ระบบจะแสดงตัวอย่างเอกสารที่นี่ เมื่อคุณอัปโหลดไฟล์ {file_path} ขึ้น GitHub เรียบร้อยแล้ว)*"
     },
     "English": {
         "login_title": "🛡️ Login to Champa AI",
@@ -79,7 +98,17 @@ lang_options = {
         "tab_chat": "💬 Q&A",
         "tab_dash": "📊 Dashboard",
         "tab_forms": "📥 Download Forms",
-        "chart_title": "2026 Business Target Portfolio"
+        "chart_title": "2026 Business Target Portfolio",
+        "chart_labels": ['Motor Insurance', 'Personal Insurance', 'Property Insurance', 'Others'],
+        "tab3_title": "### 🗂️ Internal Company Documents & Forms",
+        "tab3_hint": "💡 Hint: To display document previews properly, please use .pdf files.",
+        "form1_name": "CPI Company Profile",
+        "form2_name": "2026 Underwriting Guidelines",
+        "form3_name": "Leave Request Form",
+        "btn_download": "📥 Download File",
+        "mock_file": "This is a mock system file",
+        "expander_preview": "Click to preview document",
+        "preview_missing": "*(The document preview will appear here once you upload the file {file_path} to GitHub)*"
     },
     "Tiếng Việt (Vietnamese)": {
         "login_title": "🛡️ Đăng nhập Champa AI",
@@ -94,7 +123,17 @@ lang_options = {
         "tab_chat": "💬 Hỏi đáp",
         "tab_dash": "📊 Thống kê",
         "tab_forms": "📥 Tải biểu mẫu",
-        "chart_title": "Mục tiêu Kinh doanh năm 2026"
+        "chart_title": "Mục tiêu Kinh doanh năm 2026",
+        "chart_labels": ['Bảo hiểm xe cơ giới', 'Bảo hiểm cá nhân', 'Bảo hiểm tài sản', 'Khác'],
+        "tab3_title": "### 🗂️ Tài liệu & Biểu mẫu nội bộ",
+        "tab3_hint": "💡 Gợi ý: Để hệ thống hiển thị bản xem trước hoàn chỉnh, vui lòng sử dụng tệp .pdf.",
+        "form1_name": "Hồ sơ Năng lực Công ty CPI",
+        "form2_name": "Nguyên tắc Thẩm định 2026 (Underwriting Guidelines)",
+        "form3_name": "Mẫu đơn xin nghỉ phép (Leave Request)",
+        "btn_download": "📥 Tải tệp xuống",
+        "mock_file": "Đây là tệp thử nghiệm hệ thống",
+        "expander_preview": "Nhấp để xem trước tài liệu",
+        "preview_missing": "*(Bản xem trước sẽ hiển thị tại đây khi bạn tải tệp {file_path} lên GitHub thành công)*"
     }
 }
 
@@ -222,7 +261,7 @@ with tab1:
 with tab2:
     st.subheader(ui_text["chart_title"])
     chart_data = {
-        'Category': ['ປະກັນໄພລົດຍົນ (Motor)', 'ປະກັນໄພສ່ວນບຸກຄົນ (Personal)', 'ປະກັນໄພຊັບສິນ (Property)', 'ອື່ນໆ (Others)'],
+        'Category': ui_text["chart_labels"],
         'Percentage': [55, 25, 15, 5]
     }
     df_chart = pd.DataFrame(chart_data)
@@ -234,13 +273,13 @@ with tab2:
 
 # --- TAB 3: ดาวน์โหลดและดูตัวอย่างแบบฟอร์ม ---
 with tab3:
-    st.markdown("### 🗂️ เอกสารและแบบฟอร์มภายในบริษัท")
-    st.info("💡 คำแนะนำ: เพื่อให้ระบบแสดงหน้าตัวอย่างเอกสารได้สมบูรณ์ ควรใช้ไฟล์สกุล .pdf ครับ")
+    st.markdown(ui_text["tab3_title"])
+    st.info(ui_text["tab3_hint"])
     
     forms = [
-        {"name": "CPI Company Profile", "filename": "cpi_company_profile.pdf"},
-        {"name": "นโยบายการพิจารณารับประกันภัย 2026 (Underwriting Guidelines)", "filename": "underwriting_2026.pdf"},
-        {"name": "แบบฟอร์มคำขอลาพักร้อน (Leave Request)", "filename": "leave_request.pdf"}
+        {"name": ui_text["form1_name"], "filename": "cpi_company_profile.pdf"},
+        {"name": ui_text["form2_name"], "filename": "underwriting_2026.pdf"},
+        {"name": ui_text["form3_name"], "filename": "leave_request.pdf"}
     ]
     
     for form in forms:
@@ -251,18 +290,19 @@ with tab3:
         # ปุ่มดาวน์โหลด
         if os.path.exists(file_path):
             with open(file_path, "rb") as f:
-                st.download_button("📥 ดาวน์โหลดไฟล์", data=f, file_name=file_path, key=f"dl_{file_path}")
+                st.download_button(ui_text["btn_download"], data=f, file_name=file_path, key=f"dl_{file_path}")
         else:
-            st.download_button("📥 ดาวน์โหลดไฟล์", data="นี่คือไฟล์ทดสอบระบบ", file_name=file_path, key=f"mock_{file_path}")
+            st.download_button(ui_text["btn_download"], data=ui_text["mock_file"], file_name=file_path, key=f"mock_{file_path}")
                 
         # หน้าต่างดูตัวอย่างแบบเต็มจอ
-        with st.expander("คลิกเพื่อดูหน้าตัวอย่างเอกสาร (Preview)"):
+        with st.expander(ui_text["expander_preview"]):
             if os.path.exists(file_path):
                 with open(file_path, "rb") as f:
                     base64_pdf = base64.b64encode(f.read()).decode('utf-8')
                 pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="600" type="application/pdf" />'
                 st.markdown(pdf_display, unsafe_allow_html=True)
             else:
-                st.info(f"*(ระบบจะแสดงตัวอย่างเอกสารที่นี่ เมื่อคุณอัปโหลดไฟล์ {file_path} ขึ้น GitHub เรียบร้อยแล้ว)*")
+                missing_msg = ui_text["preview_missing"].format(file_path=file_path)
+                st.info(missing_msg)
         
         st.markdown("---")
