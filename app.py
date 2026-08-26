@@ -29,7 +29,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 1. ฐานข้อมูลภาษา (เพิ่มระบบ FAQ)
+# 1. ฐานข้อมูลภาษา (รองรับ Word/Excel)
 # ==========================================
 lang_options = {
     "ລາວ (Lao)": {
@@ -48,7 +48,7 @@ lang_options = {
         "chart_title": "ສັດສ່ວນເປົ້າໝາຍທຸລະກິດ ປະກັນໄພປີ 2026",
         "chart_labels": ['ປະກັນໄພລົດຍົນ (Motor)', 'ປະກັນໄພສ່ວນບຸກຄົນ (Personal)', 'ປະກັນໄພຊັບສິນ (Property)', 'ອື່ນໆ (Others)'],
         "tab3_title": "### 🗂️ ເອກະສານ ແລະ ແບບຟອມພາຍໃນບໍລິສັດ",
-        "tab3_hint": "💡 ຄຳແນະນຳ: ເພື່ອໃຫ້ລະບົບສະແດງໜ້າຕົວຢ່າງເອກະສານໄດ້ສົມບູນ ຄວນໃຊ້ໄຟລ໌ສະກຸນ .pdf ຄຮັບ",
+        "tab3_hint": "💡 ລະບົບຮອງຮັບການດາວໂຫຼດທຸກໄຟລ໌ (PDF, Word, Excel) ແຕ່ຈະເບິ່ງຕົວຢ່າງໜ້າເວັບໄດ້ສະເພາະ PDF ເທົ່ານັ້ນ",
         "form1_name": "CPI Company Profile",
         "form2_name": "ນະໂຍບາຍການພິຈາລະນາຮັບປະກັນໄພ 2026 (Underwriting Guidelines)",
         "form3_name": "ແບບຟອມຄຳຂໍລາພັກຜ່ອນ (Leave Request)",
@@ -56,6 +56,7 @@ lang_options = {
         "mock_file": "ນີ້ຄືໄຟລ໌ທົດສອບລະບົບ",
         "expander_preview": "ຄລິກເພື່ອເບິ່ງໜ້າຕົວຢ່າງເອກະສານ (Preview)",
         "preview_missing": "*(ລະບົບຈະສະແດງຕົວຢ່າງເອກະສານທີ່ນີ້ ເມື່ອທ່ານອັບໂຫຼດໄຟລ໌ {file_path} ຂຶ້ນ GitHub ຮຽບຮ້ອຍແລ້ວ)*",
+        "no_preview": "⚠️ ຂໍອະໄພ, ບຼາວເຊີບໍ່ຮອງຮັບການເບິ່ງຕົວຢ່າງໄຟລ໌ Word/Excel. ກະລຸນາກົດປຸ່ມດາວໂຫຼດເພື່ອເປີດອ່ານໃນເຄື່ອງຂອງທ່ານ.",
         "faq_title": "📌 ຄຳຖາມທີ່ພົບເລື້ອຍ (FAQ)",
         "faq_1": "ສະຫຼຸບແຜນທຸລະກິດປະກັນໄພລົດຍົນ ແລະ ສ່ວນບຸກຄົນປີ 2026",
         "faq_2": "ໂຄງສ້າງການລວມພະແນກຂາຍໃໝ່ (Retail & Sales 2) ເປັນແນວໃດ?",
@@ -77,7 +78,7 @@ lang_options = {
         "chart_title": "สัดส่วนเป้าหมายธุรกิจ ประกันภัยปี 2026",
         "chart_labels": ['ประกันภัยรถยนต์ (Motor)', 'ประกันภัยส่วนบุคคล (Personal)', 'ประกันภัยทรัพย์สิน (Property)', 'อื่นๆ (Others)'],
         "tab3_title": "### 🗂️ เอกสารและแบบฟอร์มภายในบริษัท",
-        "tab3_hint": "💡 คำแนะนำ: เพื่อให้ระบบแสดงหน้าตัวอย่างเอกสารได้สมบูรณ์ ควรใช้ไฟล์สกุล .pdf ครับ",
+        "tab3_hint": "💡 ระบบรองรับการดาวน์โหลดทุกไฟล์ (PDF, Word, Excel) แต่จะดูตัวอย่างหน้าเว็บได้เฉพาะ PDF เท่านั้น",
         "form1_name": "CPI Company Profile",
         "form2_name": "นโยบายการพิจารณารับประกันภัย 2026 (Underwriting Guidelines)",
         "form3_name": "แบบฟอร์มคำขอลาพักร้อน (Leave Request)",
@@ -85,6 +86,7 @@ lang_options = {
         "mock_file": "นี่คือไฟล์ทดสอบระบบ",
         "expander_preview": "คลิกเพื่อดูหน้าตัวอย่างเอกสาร (Preview)",
         "preview_missing": "*(ระบบจะแสดงตัวอย่างเอกสารที่นี่ เมื่อคุณอัปโหลดไฟล์ {file_path} ขึ้น GitHub เรียบร้อยแล้ว)*",
+        "no_preview": "⚠️ ขออภัย เว็บเบราว์เซอร์ไม่รองรับการดูตัวอย่างไฟล์ Word/Excel กรุณากดปุ่มดาวน์โหลดเพื่อเปิดอ่านในเครื่องแทนครับ",
         "faq_title": "📌 คำถามที่พบบ่อย (FAQ)",
         "faq_1": "สรุปแผนธุรกิจประกันภัยรถยนต์และส่วนบุคคลปี 2026",
         "faq_2": "โครงสร้างหลังควบรวมแผนก Retail และ Sales 2",
@@ -106,7 +108,7 @@ lang_options = {
         "chart_title": "2026 Business Target Portfolio",
         "chart_labels": ['Motor Insurance', 'Personal Insurance', 'Property Insurance', 'Others'],
         "tab3_title": "### 🗂️ Internal Company Documents & Forms",
-        "tab3_hint": "💡 Hint: To display document previews properly, please use .pdf files.",
+        "tab3_hint": "💡 Note: You can download any file (PDF, Word, Excel), but previews are only available for PDFs.",
         "form1_name": "CPI Company Profile",
         "form2_name": "2026 Underwriting Guidelines",
         "form3_name": "Leave Request Form",
@@ -114,6 +116,7 @@ lang_options = {
         "mock_file": "This is a mock system file",
         "expander_preview": "Click to preview document",
         "preview_missing": "*(The document preview will appear here once you upload the file {file_path} to GitHub)*",
+        "no_preview": "⚠️ Sorry, web browsers cannot preview Word/Excel files. Please use the download button to open the file locally.",
         "faq_title": "📌 Frequently Asked Questions",
         "faq_1": "Summary of the 2026 Motor & Personal Insurance Plan",
         "faq_2": "Structure of the newly merged Retail & Sales 2 Dept",
@@ -135,7 +138,7 @@ lang_options = {
         "chart_title": "Mục tiêu Kinh doanh năm 2026",
         "chart_labels": ['Bảo hiểm xe cơ giới', 'Bảo hiểm cá nhân', 'Bảo hiểm tài sản', 'Khác'],
         "tab3_title": "### 🗂️ Tài liệu & Biểu mẫu nội bộ",
-        "tab3_hint": "💡 Gợi ý: Để hệ thống hiển thị bản xem trước hoàn chỉnh, vui lòng sử dụng tệp .pdf.",
+        "tab3_hint": "💡 Lưu ý: Hệ thống cho phép tải mọi tệp (PDF, Word, Excel), nhưng chỉ hỗ trợ xem trước tệp PDF.",
         "form1_name": "Hồ sơ Năng lực Công ty CPI",
         "form2_name": "Nguyên tắc Thẩm định 2026 (Underwriting Guidelines)",
         "form3_name": "Mẫu đơn xin nghỉ phép (Leave Request)",
@@ -143,6 +146,7 @@ lang_options = {
         "mock_file": "Đây là tệp thử nghiệm hệ thống",
         "expander_preview": "Nhấp để xem trước tài liệu",
         "preview_missing": "*(Bản xem trước sẽ hiển thị tại đây khi bạn tải tệp {file_path} lên GitHub thành công)*",
+        "no_preview": "⚠️ Xin lỗi, trình duyệt không hỗ trợ xem trước tệp Word/Excel. Vui lòng nhấn nút tải xuống để xem trên máy tính.",
         "faq_title": "📌 Câu hỏi thường gặp (FAQ)",
         "faq_1": "Tóm tắt kế hoạch bảo hiểm xe cơ giới & cá nhân 2026",
         "faq_2": "Cơ cấu sau khi sáp nhập bộ phận Retail và Sales 2",
@@ -233,14 +237,12 @@ with tab1:
     USER_AVATAR = "👤"
     BOT_AVATAR = "🌼"
 
-    # 🟢 เพิ่มระบบ FAQ (แสดงเฉพาะตอนที่ยังไม่มีประวัติแชท)
     user_input = st.chat_input(ui_text["input"])
     
     if len(st.session_state.messages) == 0:
         st.markdown(f"**{ui_text['faq_title']}**")
         col1, col2, col3 = st.columns(3)
         
-        # ถ้ายูสเซอร์กดปุ่ม FAQ จะส่งข้อความนั้นแทนการพิมพ์
         if col1.button(ui_text["faq_1"], use_container_width=True):
             user_input = ui_text["faq_1"]
         if col2.button(ui_text["faq_2"], use_container_width=True):
@@ -250,13 +252,11 @@ with tab1:
             
         st.write("<br>", unsafe_allow_html=True)
 
-    # แสดงประวัติแชทเดิม
     for msg in st.session_state.messages:
         avatar_icon = USER_AVATAR if msg["role"] == "user" else BOT_AVATAR
         with st.chat_message(msg["role"], avatar=avatar_icon):
             st.markdown(msg["content"])
 
-    # ประมวลผลเมื่อมีการกดส่งคำถาม หรือกดปุ่ม FAQ
     if user_input:
         with st.chat_message("user", avatar=USER_AVATAR):
             st.markdown(user_input)
@@ -286,7 +286,7 @@ with tab1:
         with st.chat_message("assistant", avatar=BOT_AVATAR):
             st.markdown(bot_reply)
         st.session_state.messages.append({"role": "assistant", "content": bot_reply})
-        st.rerun() # รีเฟรชหน้าเพื่อซ่อนปุ่ม FAQ ทันทีหลังกด
+        st.rerun() 
 
 # --- TAB 2: แดชบอร์ด & รูปพาย ---
 with tab2:
@@ -307,31 +307,39 @@ with tab3:
     st.markdown(ui_text["tab3_title"])
     st.info(ui_text["tab3_hint"])
     
+    # 🟢 ตัวอย่างการเปลี่ยนสกุลไฟล์เป็น .xlsx และ .docx
     forms = [
         {"name": ui_text["form1_name"], "filename": "cpi_company_profile.pdf"},
-        {"name": ui_text["form2_name"], "filename": "underwriting_2026.pdf"},
-        {"name": ui_text["form3_name"], "filename": "leave_request.pdf"}
+        {"name": ui_text["form2_name"], "filename": "underwriting_2026.xlsx"}, # เป็น Excel
+        {"name": ui_text["form3_name"], "filename": "leave_request.docx"} # เป็น Word
     ]
     
     for form in forms:
         st.markdown(f"#### 📄 {form['name']}")
         
         file_path = form['filename']
+        # เช็คสกุลไฟล์
+        file_ext = os.path.splitext(file_path)[1].lower()
         
-        # ปุ่มดาวน์โหลด
+        # ส่วนปุ่มดาวน์โหลด (ทำงานได้กับทุกไฟล์ 100%)
         if os.path.exists(file_path):
             with open(file_path, "rb") as f:
                 st.download_button(ui_text["btn_download"], data=f, file_name=file_path, key=f"dl_{file_path}")
         else:
             st.download_button(ui_text["btn_download"], data=ui_text["mock_file"], file_name=file_path, key=f"mock_{file_path}")
                 
-        # หน้าต่างดูตัวอย่างแบบเต็มจอ
+        # ส่วนหน้าต่างดูตัวอย่างแบบเต็มจอ
         with st.expander(ui_text["expander_preview"]):
             if os.path.exists(file_path):
-                with open(file_path, "rb") as f:
-                    base64_pdf = base64.b64encode(f.read()).decode('utf-8')
-                pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="600" type="application/pdf" />'
-                st.markdown(pdf_display, unsafe_allow_html=True)
+                # ถ้าเป็น PDF ให้โชว์หน้ากระดาษ
+                if file_ext == '.pdf':
+                    with open(file_path, "rb") as f:
+                        base64_pdf = base64.b64encode(f.read()).decode('utf-8')
+                    pdf_display = f'<embed src="data:application/pdf;base64,{base64_pdf}" width="100%" height="600" type="application/pdf" />'
+                    st.markdown(pdf_display, unsafe_allow_html=True)
+                # ถ้าเป็น Word, Excel ให้ออกข้อความแจ้งเตือนแทนการเปิดหน้าขาวๆ
+                else:
+                    st.warning(ui_text["no_preview"])
             else:
                 missing_msg = ui_text["preview_missing"].format(file_path=file_path)
                 st.info(missing_msg)
