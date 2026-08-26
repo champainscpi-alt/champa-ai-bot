@@ -14,17 +14,14 @@ st.markdown("""
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@300;400;500;700&family=Noto+Sans+Thai:wght@300;400;500;700&display=swap');
         
-        /* 1. ตั้งเป็นฟอนต์พื้นฐานของแอป */
         .stApp {
             font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif;
         }
         
-        /* 2. บังคับเปลี่ยนฟอนต์ "เฉพาะส่วนที่เป็นตัวอักษร" โดยเว้น span และ div ของไอคอนลูกศรไว้ */
         h1, h2, h3, h4, h5, h6, p, a, li, button, input, label, .stMarkdown {
             font-family: 'Noto Sans Lao', 'Noto Sans Thai', sans-serif !important;
         }
         
-        /* 3. ซ่อนเมนูด้านบนและล่าง */
         #MainMenu {visibility: hidden;}
         footer {visibility: hidden;}
         header {visibility: hidden;}
@@ -32,7 +29,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==========================================
-# 1. ฐานข้อมูลภาษา (รองรับ 4 ภาษา ครอบคลุมทุกแท็บ)
+# 1. ฐานข้อมูลภาษา (เพิ่มระบบ FAQ)
 # ==========================================
 lang_options = {
     "ລາວ (Lao)": {
@@ -58,7 +55,11 @@ lang_options = {
         "btn_download": "📥 ດາວໂຫຼດໄຟລ໌",
         "mock_file": "ນີ້ຄືໄຟລ໌ທົດສອບລະບົບ",
         "expander_preview": "ຄລິກເພື່ອເບິ່ງໜ້າຕົວຢ່າງເອກະສານ (Preview)",
-        "preview_missing": "*(ລະບົບຈະສະແດງຕົວຢ່າງເອກະສານທີ່ນີ້ ເມື່ອທ່ານອັບໂຫຼດໄຟລ໌ {file_path} ຂຶ້ນ GitHub ຮຽບຮ້ອຍແລ້ວ)*"
+        "preview_missing": "*(ລະບົບຈະສະແດງຕົວຢ່າງເອກະສານທີ່ນີ້ ເມື່ອທ່ານອັບໂຫຼດໄຟລ໌ {file_path} ຂຶ້ນ GitHub ຮຽບຮ້ອຍແລ້ວ)*",
+        "faq_title": "📌 ຄຳຖາມທີ່ພົບເລື້ອຍ (FAQ)",
+        "faq_1": "ສະຫຼຸບແຜນທຸລະກິດປະກັນໄພລົດຍົນ ແລະ ສ່ວນບຸກຄົນປີ 2026",
+        "faq_2": "ໂຄງສ້າງການລວມພະແນກຂາຍໃໝ່ (Retail & Sales 2) ເປັນແນວໃດ?",
+        "faq_3": "ນະໂຍບາຍການຮັບປະກັນໄພ (Underwriting) ປີ 2026"
     },
     "ภาษาไทย (Thai)": {
         "login_title": "🛡️ เข้าสู่ระบบ Champa AI",
@@ -83,7 +84,11 @@ lang_options = {
         "btn_download": "📥 ดาวน์โหลดไฟล์",
         "mock_file": "นี่คือไฟล์ทดสอบระบบ",
         "expander_preview": "คลิกเพื่อดูหน้าตัวอย่างเอกสาร (Preview)",
-        "preview_missing": "*(ระบบจะแสดงตัวอย่างเอกสารที่นี่ เมื่อคุณอัปโหลดไฟล์ {file_path} ขึ้น GitHub เรียบร้อยแล้ว)*"
+        "preview_missing": "*(ระบบจะแสดงตัวอย่างเอกสารที่นี่ เมื่อคุณอัปโหลดไฟล์ {file_path} ขึ้น GitHub เรียบร้อยแล้ว)*",
+        "faq_title": "📌 คำถามที่พบบ่อย (FAQ)",
+        "faq_1": "สรุปแผนธุรกิจประกันภัยรถยนต์และส่วนบุคคลปี 2026",
+        "faq_2": "โครงสร้างหลังควบรวมแผนก Retail และ Sales 2",
+        "faq_3": "นโยบายพิจารณารับประกันภัย (Underwriting Guidelines) ปี 2026"
     },
     "English": {
         "login_title": "🛡️ Login to Champa AI",
@@ -108,7 +113,11 @@ lang_options = {
         "btn_download": "📥 Download File",
         "mock_file": "This is a mock system file",
         "expander_preview": "Click to preview document",
-        "preview_missing": "*(The document preview will appear here once you upload the file {file_path} to GitHub)*"
+        "preview_missing": "*(The document preview will appear here once you upload the file {file_path} to GitHub)*",
+        "faq_title": "📌 Frequently Asked Questions",
+        "faq_1": "Summary of the 2026 Motor & Personal Insurance Plan",
+        "faq_2": "Structure of the newly merged Retail & Sales 2 Dept",
+        "faq_3": "What are the 2026 Underwriting Guidelines?"
     },
     "Tiếng Việt (Vietnamese)": {
         "login_title": "🛡️ Đăng nhập Champa AI",
@@ -133,7 +142,11 @@ lang_options = {
         "btn_download": "📥 Tải tệp xuống",
         "mock_file": "Đây là tệp thử nghiệm hệ thống",
         "expander_preview": "Nhấp để xem trước tài liệu",
-        "preview_missing": "*(Bản xem trước sẽ hiển thị tại đây khi bạn tải tệp {file_path} lên GitHub thành công)*"
+        "preview_missing": "*(Bản xem trước sẽ hiển thị tại đây khi bạn tải tệp {file_path} lên GitHub thành công)*",
+        "faq_title": "📌 Câu hỏi thường gặp (FAQ)",
+        "faq_1": "Tóm tắt kế hoạch bảo hiểm xe cơ giới & cá nhân 2026",
+        "faq_2": "Cơ cấu sau khi sáp nhập bộ phận Retail và Sales 2",
+        "faq_3": "Nguyên tắc thẩm định (Underwriting Guidelines) năm 2026"
     }
 }
 
@@ -220,13 +233,30 @@ with tab1:
     USER_AVATAR = "👤"
     BOT_AVATAR = "🌼"
 
+    # 🟢 เพิ่มระบบ FAQ (แสดงเฉพาะตอนที่ยังไม่มีประวัติแชท)
+    user_input = st.chat_input(ui_text["input"])
+    
+    if len(st.session_state.messages) == 0:
+        st.markdown(f"**{ui_text['faq_title']}**")
+        col1, col2, col3 = st.columns(3)
+        
+        # ถ้ายูสเซอร์กดปุ่ม FAQ จะส่งข้อความนั้นแทนการพิมพ์
+        if col1.button(ui_text["faq_1"], use_container_width=True):
+            user_input = ui_text["faq_1"]
+        if col2.button(ui_text["faq_2"], use_container_width=True):
+            user_input = ui_text["faq_2"]
+        if col3.button(ui_text["faq_3"], use_container_width=True):
+            user_input = ui_text["faq_3"]
+            
+        st.write("<br>", unsafe_allow_html=True)
+
+    # แสดงประวัติแชทเดิม
     for msg in st.session_state.messages:
         avatar_icon = USER_AVATAR if msg["role"] == "user" else BOT_AVATAR
         with st.chat_message(msg["role"], avatar=avatar_icon):
             st.markdown(msg["content"])
 
-    user_input = st.chat_input(ui_text["input"])
-
+    # ประมวลผลเมื่อมีการกดส่งคำถาม หรือกดปุ่ม FAQ
     if user_input:
         with st.chat_message("user", avatar=USER_AVATAR):
             st.markdown(user_input)
@@ -256,6 +286,7 @@ with tab1:
         with st.chat_message("assistant", avatar=BOT_AVATAR):
             st.markdown(bot_reply)
         st.session_state.messages.append({"role": "assistant", "content": bot_reply})
+        st.rerun() # รีเฟรชหน้าเพื่อซ่อนปุ่ม FAQ ทันทีหลังกด
 
 # --- TAB 2: แดชบอร์ด & รูปพาย ---
 with tab2:
